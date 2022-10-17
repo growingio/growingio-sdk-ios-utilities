@@ -41,13 +41,19 @@ let package = Package(
             name: "GrowingUtilsTrackerCore",
             dependencies: [],
             path: "Sources/TrackerCore",
-            publicHeadersPath: "Public"
+            publicHeadersPath: "Public",
+            cSettings: [
+                .headerSearchPath("Public"),
+            ]
         ),
         .target(
             name: "GrowingUtilsAutotrackerCore",
             dependencies: ["GrowingUtilsTrackerCore"],
             path: "Sources/AutotrackerCore",
-            publicHeadersPath: "Public"
+            publicHeadersPath: "Public",
+            cSettings: [
+                .headerSearchPath("Public"),
+            ]
         ),
     ]
 )
