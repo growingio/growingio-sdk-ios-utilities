@@ -1,5 +1,5 @@
 //
-//  GrowingAppLifecycle.m
+//  GrowingApplicationLifecycle.m
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/10.
@@ -17,17 +17,17 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingAppLifecycle.h"
+#import "GrowingApplicationLifecycle.h"
 #import "GrowingTimeUtil.h"
 
-@interface GrowingAppLifecycle ()
+@interface GrowingApplicationLifecycle ()
 
 @property (strong, nonatomic, readonly) NSPointerArray *lifecycleDelegates;
 @property (strong, nonatomic, readonly) NSLock *delegateLock;
 
 @end
 
-@implementation GrowingAppLifecycle
+@implementation GrowingApplicationLifecycle
 
 - (instancetype)init {
     self = [super init];
