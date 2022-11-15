@@ -3,7 +3,7 @@
 //  Methods and Category have been renamed to namespace to GrowingIO iOS SDK
 //  Add some Methods to adapt other cases
 //
-//  GrowingSwizzler.m
+//  GrowingULSwizzler.m
 //  GrowingAnalytics
 //
 //  Created by GrowingIO on 2020/7/23.
@@ -21,14 +21,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingSwizzler.h"
+#import "GrowingULSwizzler.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
 #define GROWING_MIN_ARGS 2
 #define GROWING_MAX_ARGS 5
 
-@interface GrowingSwizzleEntity : NSObject
+@interface GrowingULSwizzleEntity : NSObject
 
 @property (nonatomic, assign) Class class;
 @property (nonatomic, assign) SEL selector;
@@ -36,7 +36,7 @@
 @property (nonatomic, assign) uint numArgs;
 @property (nonatomic, copy) NSMapTable *blocks;
 
-- (instancetype)initWithBlock:(growingSwizzleBlock)aBlock
+- (instancetype)initWithBlock:(GrowingULSwizzleBlock)aBlock
                         named:(NSString *)aName
                      forClass:(Class)aClass
                      selector:(SEL)aSelector
@@ -45,18 +45,18 @@
 
 @end
 
-
-@implementation GrowingSwizzleEntity
+@implementation GrowingULSwizzleEntity
 
 - (instancetype)init {
     if ((self = [super init])) {
-        self.blocks = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
-                                            valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
+        self.blocks = [NSMapTable
+            mapTableWithKeyOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality)
+                      valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
     }
     return self;
 }
 
-- (instancetype)initWithBlock:(growingSwizzleBlock)aBlock
+- (instancetype)initWithBlock:(GrowingULSwizzleBlock)aBlock
                         named:(NSString *)aName
                      forClass:(Class)aClass
                      selector:(SEL)aSelector
@@ -79,63 +79,70 @@
     while ((key = [keys nextObject])) {
         descriptors = [descriptors stringByAppendingFormat:@"\t%@ : %@\n", key, [self.blocks objectForKey:key]];
     }
-    return [NSString stringWithFormat:@"Swizzle on %@::%@ [\n%@]", NSStringFromClass(self.class), NSStringFromSelector(self.selector), descriptors];
+    return [NSString stringWithFormat:@"Swizzle on %@::%@ [\n%@]",
+                                      NSStringFromClass(self.class),
+                                      NSStringFromSelector(self.selector),
+                                      descriptors];
 }
 
 @end
 
 static NSMapTable *growingSwizzles;
 
-static void growing_swizzledMethod_2(id self, SEL _cmd) {
+static void growingul_swizzledMethod_2(id self, SEL _cmd) {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    GrowingSwizzleEntity *swizzle = (GrowingSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
+    GrowingULSwizzleEntity *swizzle =
+        (GrowingULSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
     if (swizzle) {
-        ((void(*)(id, SEL))swizzle.originalMethod)(self, _cmd);
+        ((void (*)(id, SEL))swizzle.originalMethod)(self, _cmd);
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
-        growingSwizzleBlock block;
+        GrowingULSwizzleBlock block;
         while ((block = [blocks nextObject])) {
             block(self, _cmd);
         }
     }
 }
 
-static void growing_swizzledMethod_3(id self, SEL _cmd, id arg) {
+static void growingul_swizzledMethod_3(id self, SEL _cmd, id arg) {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    GrowingSwizzleEntity *swizzle = (GrowingSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
+    GrowingULSwizzleEntity *swizzle =
+        (GrowingULSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
     if (swizzle) {
-        ((void(*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
+        ((void (*)(id, SEL, id))swizzle.originalMethod)(self, _cmd, arg);
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
-        growingSwizzleBlock block;
+        GrowingULSwizzleBlock block;
         while ((block = [blocks nextObject])) {
             block(self, _cmd, arg);
         }
     }
 }
 
-static void growing_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2) {
+static void growingul_swizzledMethod_4(id self, SEL _cmd, id arg, id arg2) {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    GrowingSwizzleEntity *swizzle = (GrowingSwizzleEntity *)[growingSwizzles objectForKey:(__bridge id)((void *)aMethod)];
+    GrowingULSwizzleEntity *swizzle =
+        (GrowingULSwizzleEntity *)[growingSwizzles objectForKey:(__bridge id)((void *)aMethod)];
     if (swizzle) {
-        ((void(*)(id, SEL, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2);
+        ((void (*)(id, SEL, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2);
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
-        growingSwizzleBlock block;
+        GrowingULSwizzleBlock block;
         while ((block = [blocks nextObject])) {
             block(self, _cmd, arg, arg2);
         }
     }
 }
 
-static void growing_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3) {
+static void growingul_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3) {
     Method aMethod = class_getInstanceMethod([self class], _cmd);
-    GrowingSwizzleEntity *swizzle = (GrowingSwizzleEntity *)[growingSwizzles objectForKey:(__bridge id)((void *)aMethod)];
+    GrowingULSwizzleEntity *swizzle =
+        (GrowingULSwizzleEntity *)[growingSwizzles objectForKey:(__bridge id)((void *)aMethod)];
     if (swizzle) {
-        ((void(*)(id, SEL, id, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2, arg3);
+        ((void (*)(id, SEL, id, id, id))swizzle.originalMethod)(self, _cmd, arg, arg2, arg3);
 
         NSEnumerator *blocks = [swizzle.blocks objectEnumerator];
-        growingSwizzleBlock block;
+        GrowingULSwizzleBlock block;
         while ((block = [blocks nextObject])) {
             block(self, _cmd, arg, arg2, arg3);
         }
@@ -145,34 +152,37 @@ static void growing_swizzledMethod_5(id self, SEL _cmd, id arg, id arg2, id arg3
 // Ignore the warning cause we need the paramters to be dynamic and it's only being used internally
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
-static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])() = {growing_swizzledMethod_2, growing_swizzledMethod_3, growing_swizzledMethod_4, growing_swizzledMethod_5};
+static void (*growingul_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])() = {growingul_swizzledMethod_2,
+                                                                                       growingul_swizzledMethod_3,
+                                                                                       growingul_swizzledMethod_4,
+                                                                                       growingul_swizzledMethod_5};
 #pragma clang diagnostic pop
 
-@implementation GrowingSwizzler
+@implementation GrowingULSwizzler
 
 + (void)load {
-    growingSwizzles = [NSMapTable mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
-                                     valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
-
+    growingSwizzles = [NSMapTable
+        mapTableWithKeyOptions:(NSPointerFunctionsOpaqueMemory | NSPointerFunctionsOpaquePersonality)
+                  valueOptions:(NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality)];
 }
 
 + (void)growing_printSwizzles {
     NSEnumerator *en = [growingSwizzles objectEnumerator];
-    GrowingSwizzleEntity *swizzle;
-    while ((swizzle = (GrowingSwizzleEntity *)[en nextObject])) {
+    GrowingULSwizzleEntity *swizzle;
+    while ((swizzle = (GrowingULSwizzleEntity *)[en nextObject])) {
         NSLog(@"%@", swizzle.description);
     }
 }
 
-+ (GrowingSwizzleEntity *)swizzleForMethod:(Method)aMethod {
-    return (GrowingSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
++ (GrowingULSwizzleEntity *)swizzleForMethod:(Method)aMethod {
+    return (GrowingULSwizzleEntity *)[growingSwizzles objectForKey:GROWING_MAPTABLE_ID(aMethod)];
 }
 
 + (void)removeSwizzleForMethod:(Method)aMethod {
     [growingSwizzles removeObjectForKey:GROWING_MAPTABLE_ID(aMethod)];
 }
 
-+ (void)setSwizzle:(GrowingSwizzleEntity *)swizzle forMethod:(Method)aMethod {
++ (void)setSwizzle:(GrowingULSwizzleEntity *)swizzle forMethod:(Method)aMethod {
     [growingSwizzles setObject:swizzle forKey:GROWING_MAPTABLE_ID(aMethod)];
 }
 
@@ -196,7 +206,7 @@ static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])(
     if (!proxy) {
         return nil;
     }
-    
+
     id realDelegate = proxy;
     id obj = nil;
     do {
@@ -204,14 +214,15 @@ static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])(
         if (class_getInstanceMethod(object_getClass(realDelegate), selector)) {
             break;
         }
-        
+
         //如果使用了NSProxy或者快速转发,判断forwardingTargetForSelector是否实现
         //默认forwardingTargetForSelector都有实现，只是返回为nil
         obj = ((id(*)(id, SEL, SEL))objc_msgSend)(realDelegate, @selector(forwardingTargetForSelector:), selector);
-        if (!obj) break;
+        if (!obj)
+            break;
         realDelegate = obj;
     } while (obj);
-    
+
     return realDelegate;
 }
 
@@ -221,55 +232,73 @@ static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])(
     return class_respondsToSelector(cls, sel);
 }
 
-+ (void)growing_swizzleSelector:(SEL)aSelector
-                        onClass:(Class)aClass
-                      withBlock:(growingSwizzleBlock)aBlock
-                          named:(NSString *)aName {
-    
++ (void)growingul_swizzleSelector:(SEL)aSelector
+                          onClass:(Class)aClass
+                        withBlock:(GrowingULSwizzleBlock)aBlock
+                            named:(NSString *)aName {
     Method aMethod = class_getInstanceMethod(aClass, aSelector);
-    
+
     if (!aMethod) {
-        NSAssert(NO, @"SwizzlerAssert: Cannot find method for %@ on %@", NSStringFromSelector(aSelector), NSStringFromClass(aClass));
+        NSAssert(NO,
+                 @"SwizzlerAssert: Cannot find method for %@ on %@",
+                 NSStringFromSelector(aSelector),
+                 NSStringFromClass(aClass));
         return;
     }
-    
+
     uint numArgs = method_getNumberOfArguments(aMethod);
     if (numArgs >= GROWING_MIN_ARGS && numArgs <= GROWING_MAX_ARGS) {
-            
         BOOL isLocal = [self isLocallyDefinedMethod:aMethod onClass:aClass];
-        IMP swizzledMethod = (IMP)growing_swizzledMethods[numArgs - 2];
-        GrowingSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
-            
+        IMP swizzledMethod = (IMP)growingul_swizzledMethods[numArgs - 2];
+        GrowingULSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
+
         if (isLocal) {
             if (!swizzle) {
                 IMP originalMethod = method_getImplementation(aMethod);
-                    
+
                 // Replace the local implementation of this method with the swizzled one
-                method_setImplementation(aMethod,swizzledMethod);
-                    
+                method_setImplementation(aMethod, swizzledMethod);
+
                 // Create and add the swizzle
-                swizzle = [[GrowingSwizzleEntity alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+                swizzle = [[GrowingULSwizzleEntity alloc] initWithBlock:aBlock
+                                                                  named:aName
+                                                               forClass:aClass
+                                                               selector:aSelector
+                                                         originalMethod:originalMethod
+                                                            withNumArgs:numArgs];
                 [self setSwizzle:swizzle forMethod:aMethod];
-                    
+
             } else {
                 [swizzle.blocks setObject:aBlock forKey:aName];
             }
         } else {
             IMP originalMethod = swizzle ? swizzle.originalMethod : method_getImplementation(aMethod);
-                
+
             // Add the swizzle as a new local method on the class.
             if (!class_addMethod(aClass, aSelector, swizzledMethod, method_getTypeEncoding(aMethod))) {
-                NSAssert(NO, @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                NSAssert(
+                    NO,
+                    @"SwizzlerAssert: Could not add swizzled for %@::%@, even though it didn't already exist locally",
+                    NSStringFromClass(aClass),
+                    NSStringFromSelector(aSelector));
                 return;
             }
             // Now re-get the Method, it should be the one we just added.
             Method newMethod = class_getInstanceMethod(aClass, aSelector);
             if (aMethod == newMethod) {
-                NSAssert(NO, @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method", NSStringFromClass(aClass), NSStringFromSelector(aSelector));
+                NSAssert(NO,
+                         @"SwizzlerAssert: Newly added method for %@::%@ was the same as the old method",
+                         NSStringFromClass(aClass),
+                         NSStringFromSelector(aSelector));
                 return;
             }
-                
-            GrowingSwizzleEntity *newSwizzle = [[GrowingSwizzleEntity alloc] initWithBlock:aBlock named:aName forClass:aClass selector:aSelector originalMethod:originalMethod withNumArgs:numArgs];
+
+            GrowingULSwizzleEntity *newSwizzle = [[GrowingULSwizzleEntity alloc] initWithBlock:aBlock
+                                                                                         named:aName
+                                                                                      forClass:aClass
+                                                                                      selector:aSelector
+                                                                                originalMethod:originalMethod
+                                                                                   withNumArgs:numArgs];
             [self setSwizzle:newSwizzle forMethod:newMethod];
         }
     } else {
@@ -279,7 +308,7 @@ static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])(
 
 + (void)growing_unswizzleSelector:(SEL)aSelector onClass:(Class)aClass {
     Method aMethod = class_getInstanceMethod(aClass, aSelector);
-    GrowingSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
+    GrowingULSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
     if (swizzle && aMethod) {
         method_setImplementation(aMethod, swizzle.originalMethod);
         [self removeSwizzleForMethod:aMethod];
@@ -292,17 +321,16 @@ static void (*growing_swizzledMethods[GROWING_MAX_ARGS - GROWING_MIN_ARGS + 1])(
 */
 + (void)growing_unswizzleSelector:(SEL)aSelector onClass:(Class)aClass named:(NSString *)aName {
     Method aMethod = class_getInstanceMethod(aClass, aSelector);
-       GrowingSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
-       if (swizzle) {
-           if (aName) {
-               [swizzle.blocks removeObjectForKey:aName];
-           }
-           if (aMethod && (!aName || swizzle.blocks.count == 0)) {
-               method_setImplementation(aMethod, swizzle.originalMethod);
-               [self removeSwizzleForMethod:aMethod];
-           }
-       }
+    GrowingULSwizzleEntity *swizzle = [self swizzleForMethod:aMethod];
+    if (swizzle) {
+        if (aName) {
+            [swizzle.blocks removeObjectForKey:aName];
+        }
+        if (aMethod && (!aName || swizzle.blocks.count == 0)) {
+            method_setImplementation(aMethod, swizzle.originalMethod);
+            [self removeSwizzleForMethod:aMethod];
+        }
+    }
 }
-
 
 @end

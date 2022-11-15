@@ -1,5 +1,5 @@
 //
-//  GrowingApplicationLifecycle.m
+//  GrowingULAppLifecycle.m
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/10.
@@ -17,17 +17,17 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingApplicationLifecycle.h"
-#import "GrowingTimeUtil.h"
+#import "GrowingULAppLifecycle.h"
+#import "GrowingULTimeUtil.h"
 
-@interface GrowingApplicationLifecycle ()
+@interface GrowingULAppLifecycle ()
 
 @property (strong, nonatomic, readonly) NSPointerArray *lifecycleDelegates;
 @property (strong, nonatomic, readonly) NSLock *delegateLock;
 
 @end
 
-@implementation GrowingApplicationLifecycle
+@implementation GrowingULAppLifecycle
 
 - (instancetype)init {
     self = [super init];
@@ -60,9 +60,11 @@
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
     // UIApplication: Process Lifecycle
-    for (NSString *name in @[UIApplicationDidFinishLaunchingNotification,
-            UIApplicationWillTerminateNotification]) {
-        [nc addObserver:self selector:@selector(handleProcessLifecycleNotification:) name:name object:[UIApplication sharedApplication]];
+    for (NSString *name in @[UIApplicationDidFinishLaunchingNotification, UIApplicationWillTerminateNotification]) {
+        [nc addObserver:self
+               selector:@selector(handleProcessLifecycleNotification:)
+                   name:name
+                 object:[UIApplication sharedApplication]];
     }
 
     NSDictionary *sceneManifestDict = [[NSBundle mainBundle] infoDictionary][@"UIApplicationSceneManifest"];
@@ -70,11 +72,16 @@
     if (sceneManifestDict && UIDevice.currentDevice.systemVersion.doubleValue >= 13.0) {
         [self addSceneNotification];
     } else {
-        for (NSString *name in @[UIApplicationDidBecomeActiveNotification,
-                UIApplicationWillEnterForegroundNotification,
-                UIApplicationWillResignActiveNotification,
-                UIApplicationDidEnterBackgroundNotification]) {
-            [nc addObserver:self selector:@selector(handleUILifecycleNotification:) name:name object:[UIApplication sharedApplication]];
+        for (NSString *name in @[
+                 UIApplicationDidBecomeActiveNotification,
+                 UIApplicationWillEnterForegroundNotification,
+                 UIApplicationWillResignActiveNotification,
+                 UIApplicationDidEnterBackgroundNotification
+             ]) {
+            [nc addObserver:self
+                   selector:@selector(handleUILifecycleNotification:)
+                       name:name
+                     object:[UIApplication sharedApplication]];
         }
     }
 }
@@ -82,8 +89,9 @@
 - (void)addSceneNotification {
     if (@available(iOS 13, *)) {
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-        // notification name use NSString rather than UISceneWillDeactivateNotification. Xcode 9 package error for no iOS 13 SDK
-        // (use of undeclared identifier 'UISceneDidEnterBackgroundNotification'; did you mean 'UIApplicationDidEnterBackgroundNotification'?)
+        // notification name use NSString rather than UISceneWillDeactivateNotification. Xcode 9 package error for no
+        // iOS 13 SDK (use of undeclared identifier 'UISceneDidEnterBackgroundNotification'; did you mean
+        // 'UIApplicationDidEnterBackgroundNotification'?)
         [nc addObserver:self
                selector:@selector(dispatchApplicationWillResignActive)
                    name:@"UISceneWillDeactivateNotification"
@@ -104,7 +112,6 @@
                    name:@"UISceneDidEnterBackgroundNotification"
                  object:nil];
     }
-
 }
 
 - (void)dealloc {
@@ -145,7 +152,10 @@
 
 - (void)removeAppLifecycleDelegate:(id)delegate {
     [self.delegateLock lock];
-    [self.lifecycleDelegates.allObjects enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSObject *obj, NSUInteger idx, BOOL *_Nonnull stop) {
+    [self.lifecycleDelegates.allObjects enumerateObjectsWithOptions:NSEnumerationReverse
+                                                         usingBlock:^(NSObject *obj,
+                                                                      NSUInteger idx,
+                                                                      BOOL *_Nonnull stop) {
         if (delegate == obj) {
             [self.lifecycleDelegates removePointerAtIndex:idx];
             *stop = YES;
@@ -155,7 +165,7 @@
 }
 
 - (void)dispatchApplicationDidFinishLaunching:(NSDictionary *)userInfo {
-    self.appDidFinishLaunchingTime = [GrowingTimeUtil currentSystemTimeMillis];
+    self.appDidFinishLaunchingTime = [GrowingULTimeUtil currentSystemTimeMillis];
 
     [self.delegateLock lock];
     for (id delegate in self.lifecycleDelegates) {
@@ -177,7 +187,7 @@
 }
 
 - (void)dispatchApplicationDidEnterBackground {
-    self.appDidEnterBackgroundTime = [GrowingTimeUtil currentSystemTimeMillis];
+    self.appDidEnterBackgroundTime = [GrowingULTimeUtil currentSystemTimeMillis];
 
     [self.delegateLock lock];
     for (id delegate in self.lifecycleDelegates) {
@@ -189,7 +199,7 @@
 }
 
 - (void)dispatchApplicationDidBecomeActive {
-    self.appDidBecomeActiveTime = [GrowingTimeUtil currentSystemTimeMillis];
+    self.appDidBecomeActiveTime = [GrowingULTimeUtil currentSystemTimeMillis];
 
     [self.delegateLock lock];
     for (id delegate in self.lifecycleDelegates) {
@@ -201,7 +211,7 @@
 }
 
 - (void)dispatchApplicationWillResignActive {
-    self.appWillResignActiveTime = [GrowingTimeUtil currentSystemTimeMillis];
+    self.appWillResignActiveTime = [GrowingULTimeUtil currentSystemTimeMillis];
 
     [self.delegateLock lock];
     for (id delegate in self.lifecycleDelegates) {
@@ -213,7 +223,7 @@
 }
 
 - (void)dispatchApplicationWillEnterForeground {
-    self.appWillEnterForegroundTime = [GrowingTimeUtil currentSystemTimeMillis];
+    self.appWillEnterForegroundTime = [GrowingULTimeUtil currentSystemTimeMillis];
 
     [self.delegateLock lock];
     for (id delegate in self.lifecycleDelegates) {

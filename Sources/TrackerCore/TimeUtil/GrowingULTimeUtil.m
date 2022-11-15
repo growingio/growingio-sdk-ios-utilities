@@ -1,5 +1,5 @@
 //
-//  GrowingTimeUtil.m
+//  GrowingULTimeUtil.m
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/11.
@@ -17,9 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingTimeUtil.h"
+#import "GrowingULTimeUtil.h"
 
-@implementation GrowingTimeUtil
+@implementation GrowingULTimeUtil
 
 + (long long)currentTimeMillis {
     NSDate *dateNow = [NSDate date];

@@ -22,7 +22,7 @@
 //
 //  https://github.com/rentzsch/jrswizzle
 //
-//  GrowingSwizzle.h
+//  GrowingULSwizzle.h
 //  GrowingAnalytics
 //
 //  Created by GrowingIO on 2020/7/22.
@@ -44,15 +44,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSObject (GrowingSwizzle)
+@interface NSObject (GrowingULSwizzle)
 
-+ (BOOL)growing_swizzleMethod:(SEL)origSel_ withMethod:(SEL)altSel_ error:(NSError **)error_;
-+ (BOOL)growing_swizzleClassMethod:(SEL)origSel_ withClassMethod:(SEL)altSel_ error:(NSError **)error_;
++ (BOOL)growingul_swizzleMethod:(SEL)origSel_ withMethod:(SEL)altSel_ error:(NSError **)error_;
++ (BOOL)growingul_swizzleClassMethod:(SEL)origSel_ withClassMethod:(SEL)altSel_ error:(NSError **)error_;
 
 /**
  ```
  __block NSInvocation *invocation = nil;
- invocation = [self growing_swizzleMethod:@selector(initWithCoder:) withBlock:^(id obj, NSCoder *coder) {
+ invocation = [self growingul_swizzleMethod:@selector(initWithCoder:) withBlock:^(id obj, NSCoder *coder) {
  NSLog(@"before %@, coder %@", obj, coder);
  [invocation setArgument:&coder atIndex:2];
  [invocation invokeWithTarget:obj];
@@ -63,19 +63,19 @@ NS_ASSUME_NONNULL_BEGIN
  } error:nil];
  ```
  */
-+ (nullable NSInvocation *)growing_swizzleMethod:(SEL)origSel withBlock:(id)block error:(NSError **)error;
++ (nullable NSInvocation *)growingul_swizzleMethod:(SEL)origSel withBlock:(id)block error:(NSError **)error;
 
 /**
  ```
  __block NSInvocation *classInvocation = nil;
- classInvocation = [self growing_swizzleClassMethod:@selector(test) withBlock:^() {
+ classInvocation = [self growingul_swizzleClassMethod:@selector(test) withBlock:^() {
  NSLog(@"before");
  [classInvocation invoke];
  NSLog(@"after");
  } error:nil];
  ```
  */
-+ (nullable NSInvocation *)growing_swizzleClassMethod:(SEL)origSel withBlock:(id)block error:(NSError **)error;
++ (nullable NSInvocation *)growingul_swizzleClassMethod:(SEL)origSel withBlock:(id)block error:(NSError **)error;
 
 @end
 

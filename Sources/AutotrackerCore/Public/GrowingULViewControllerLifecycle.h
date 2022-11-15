@@ -1,5 +1,5 @@
 //
-//  GrowingViewControllerLifecycle.h
+//  GrowingULViewControllerLifecycle.h
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/23.
@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol GrowingViewControllerLifecycleDelegate <NSObject>
+@protocol GrowingULViewControllerLifecycleDelegate <NSObject>
 
 @optional
 - (void)viewControllerLoadView:(UIViewController *)controller;
@@ -39,18 +39,18 @@
 
 @interface UIViewController (GrowingUtils)
 
-@property (nonatomic, assign) BOOL growing_DidAppear;
+@property (nonatomic, assign) BOOL growingul_didAppear;
 
 @end
 
-@interface GrowingViewControllerLifecycle : NSObject
+@interface GrowingULViewControllerLifecycle : NSObject
 
 + (instancetype)sharedInstance;
 
 + (void)setup;
 
-- (void)addViewControllerLifecycleDelegate:(id <GrowingViewControllerLifecycleDelegate>)delegate;
+- (void)addViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate;
 
-- (void)removeViewControllerLifecycleDelegate:(id <GrowingViewControllerLifecycleDelegate>)delegate;
+- (void)removeViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate;
 
 @end

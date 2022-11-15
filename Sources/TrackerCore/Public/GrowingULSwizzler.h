@@ -3,7 +3,7 @@
 //  Methods and Category have been renamed to namespace to GrowingIO iOS SDK
 //  Add some Methods to adapt other cases
 //
-//  GrowingSwizzler.h
+//  GrowingULSwizzler.h
 //  GrowingAnalytics
 //
 //  Created by GrowingIO on 2020/7/23.
@@ -29,19 +29,19 @@
 // Ignore the warning cause we need the paramters to be dynamic and it's only being used internally
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wstrict-prototypes"
-typedef void (^growingSwizzleBlock)();
+typedef void (^GrowingULSwizzleBlock)();
 #pragma clang diagnostic pop
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GrowingSwizzler : NSObject
-//setDelegate时，返回正确的delegate
+@interface GrowingULSwizzler : NSObject
+// setDelegate时，返回正确的delegate
 + (id)realDelegate:(id)proxy toSelector:(SEL)selector;
 + (BOOL)realDelegateClass:(Class)cls respondsToSelector:(SEL)sel;
-+ (void)growing_swizzleSelector:(SEL)aSelector
-                        onClass:(Class)aClass
-                      withBlock:(growingSwizzleBlock)aBlock
-                          named:(NSString *)aName;
++ (void)growingul_swizzleSelector:(SEL)aSelector
+                          onClass:(Class)aClass
+                        withBlock:(GrowingULSwizzleBlock)aBlock
+                            named:(NSString *)aName;
 + (void)growing_unswizzleSelector:(SEL)aSelector onClass:(Class)aClass named:(NSString *)aName;
 + (void)growing_printSwizzles;
 

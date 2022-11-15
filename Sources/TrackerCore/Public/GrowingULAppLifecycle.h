@@ -1,5 +1,5 @@
 //
-//  GrowingApplicationLifecycle.h
+//  GrowingULAppLifecycle.h
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/10.
@@ -20,7 +20,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol GrowingApplicationLifecycleDelegate <NSObject>
+@protocol GrowingULAppLifecycleDelegate <NSObject>
 
 @optional
 - (void)applicationDidFinishLaunching:(NSDictionary *)userInfo;
@@ -37,7 +37,7 @@
 
 @end
 
-@interface GrowingApplicationLifecycle : NSObject
+@interface GrowingULAppLifecycle : NSObject
 
 @property (nonatomic, assign) double appDidFinishLaunchingTime;
 @property (nonatomic, assign) double appWillEnterForegroundTime;
@@ -49,8 +49,8 @@
 
 + (void)setup;
 
-- (void)addAppLifecycleDelegate:(id <GrowingApplicationLifecycleDelegate>)delegate;
+- (void)addAppLifecycleDelegate:(id<GrowingULAppLifecycleDelegate>)delegate;
 
-- (void)removeAppLifecycleDelegate:(id <GrowingApplicationLifecycleDelegate>)delegate;
+- (void)removeAppLifecycleDelegate:(id<GrowingULAppLifecycleDelegate>)delegate;
 
 @end

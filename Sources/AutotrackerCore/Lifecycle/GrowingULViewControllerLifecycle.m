@@ -1,5 +1,5 @@
 //
-//  GrowingViewControllerLifecycle.m
+//  GrowingULViewControllerLifecycle.m
 //  GrowingAnalytics
 //
 // Created by xiangyang on 2020/11/23.
@@ -17,12 +17,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingViewControllerLifecycle.h"
-#import "GrowingTimeUtil.h"
-#import "GrowingSwizzle.h"
+#import "GrowingULViewControllerLifecycle.h"
+#import "GrowingULTimeUtil.h"
+#import "GrowingULSwizzle.h"
 #import <objc/runtime.h>
 
-@interface GrowingViewControllerLifecycle ()
+@interface GrowingULViewControllerLifecycle ()
 
 @property (strong, nonatomic, readonly) NSPointerArray *lifecycleDelegates;
 @property (strong, nonatomic, readonly) NSLock *delegateLock;
@@ -38,48 +38,48 @@
 
 @implementation UIViewController (GrowingUtils)
 
-- (void)growing_loadView {
-    [self growing_loadView];
-    [[GrowingViewControllerLifecycle sharedInstance] dispatchViewControllerLoadView:self];
+- (void)growingul_loadView {
+    [self growingul_loadView];
+    [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerLoadView:self];
 }
 
-- (void)growing_viewDidLoad {
-    [self growing_viewDidLoad];
-    [[GrowingViewControllerLifecycle sharedInstance] dispatchViewControllerDidLoad:self];
+- (void)growingul_viewDidLoad {
+    [self growingul_viewDidLoad];
+    [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerDidLoad:self];
 }
 
-- (void)growing_viewWillAppear:(BOOL)animated {
-    [self growing_viewWillAppear:animated];
-    [[GrowingViewControllerLifecycle sharedInstance] dispatchViewControllerWillAppear:self];
+- (void)growingul_viewWillAppear:(BOOL)animated {
+    [self growingul_viewWillAppear:animated];
+    [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerWillAppear:self];
 }
 
-- (void)growing_viewDidAppear:(BOOL)animated {
-    [self growing_viewDidAppear:animated];
-    self.growing_DidAppear = YES;
-    [[GrowingViewControllerLifecycle sharedInstance] dispatchViewControllerDidAppear:self];
+- (void)growingul_viewDidAppear:(BOOL)animated {
+    [self growingul_viewDidAppear:animated];
+    self.growingul_didAppear = YES;
+    [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerDidAppear:self];
 }
 
-- (void)growing_viewWillDisappear:(BOOL)animated {
-    [self growing_viewWillDisappear:animated];
-    [GrowingViewControllerLifecycle.sharedInstance dispatchViewControllerWillDisappear:self];
+- (void)growingul_viewWillDisappear:(BOOL)animated {
+    [self growingul_viewWillDisappear:animated];
+    [GrowingULViewControllerLifecycle.sharedInstance dispatchViewControllerWillDisappear:self];
 }
 
-- (void)growing_viewDidDisappear:(BOOL)animated {
-    [self growing_viewDidDisappear:animated];
-    [GrowingViewControllerLifecycle.sharedInstance dispatchViewControllerDidDisappear:self];
+- (void)growingul_viewDidDisappear:(BOOL)animated {
+    [self growingul_viewDidDisappear:animated];
+    [GrowingULViewControllerLifecycle.sharedInstance dispatchViewControllerDidDisappear:self];
 }
 
-- (BOOL)growing_DidAppear {
+- (BOOL)growingul_didAppear {
     return ((NSNumber *)objc_getAssociatedObject(self, _cmd)).boolValue;
 }
 
-- (void)setGrowing_DidAppear:(BOOL)growing_DidAppear {
-    objc_setAssociatedObject(self, @selector(growing_DidAppear), @(growing_DidAppear), OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setGrowingul_didAppear:(BOOL)didAppear {
+    objc_setAssociatedObject(self, @selector(growingul_didAppear), @(didAppear), OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 @end
 
-@implementation GrowingViewControllerLifecycle
+@implementation GrowingULViewControllerLifecycle
 
 - (instancetype)init {
     self = [super init];
@@ -109,32 +109,32 @@
 }
 
 - (void)setupPageStateNotification {
-    [UIViewController growing_swizzleMethod:@selector(loadView)
-                                 withMethod:@selector(growing_loadView)
-                                      error:nil];
+    [UIViewController growingul_swizzleMethod:@selector(loadView)
+                                   withMethod:@selector(growingul_loadView)
+                                        error:nil];
 
-    [UIViewController growing_swizzleMethod:@selector(viewDidLoad)
-                                 withMethod:@selector(growing_viewDidLoad)
-                                      error:nil];
-    
-    [UIViewController growing_swizzleMethod:@selector(viewWillAppear:)
-                                 withMethod:@selector(growing_viewWillAppear:)
-                                      error:nil];
-    
-    [UIViewController growing_swizzleMethod:@selector(viewDidAppear:)
-                                 withMethod:@selector(growing_viewDidAppear:)
-                                      error:nil];
-    
-    [UIViewController growing_swizzleMethod:@selector(viewWillDisappear:)
-                                 withMethod:@selector(growing_viewWillDisappear:)
-                                      error:nil];
-    
-    [UIViewController growing_swizzleMethod:@selector(viewDidDisappear:)
-                                 withMethod:@selector(growing_viewDidDisappear:)
-                                      error:nil];
+    [UIViewController growingul_swizzleMethod:@selector(viewDidLoad)
+                                   withMethod:@selector(growingul_viewDidLoad)
+                                        error:nil];
+
+    [UIViewController growingul_swizzleMethod:@selector(viewWillAppear:)
+                                   withMethod:@selector(growingul_viewWillAppear:)
+                                        error:nil];
+
+    [UIViewController growingul_swizzleMethod:@selector(viewDidAppear:)
+                                   withMethod:@selector(growingul_viewDidAppear:)
+                                        error:nil];
+
+    [UIViewController growingul_swizzleMethod:@selector(viewWillDisappear:)
+                                   withMethod:@selector(growingul_viewWillDisappear:)
+                                        error:nil];
+
+    [UIViewController growingul_swizzleMethod:@selector(viewDidDisappear:)
+                                   withMethod:@selector(growingul_viewDidDisappear:)
+                                        error:nil];
 }
 
-- (void)addViewControllerLifecycleDelegate:(id <GrowingViewControllerLifecycleDelegate>)delegate {
+- (void)addViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate {
     [self.delegateLock lock];
     if (![self.lifecycleDelegates.allObjects containsObject:delegate]) {
         [self.lifecycleDelegates addPointer:(__bridge void *)delegate];
@@ -142,17 +142,18 @@
     [self.delegateLock unlock];
 }
 
-- (void)removeViewControllerLifecycleDelegate:(id <GrowingViewControllerLifecycleDelegate>)delegate {
+- (void)removeViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate {
     [self.delegateLock lock];
     [self.lifecycleDelegates.allObjects enumerateObjectsWithOptions:NSEnumerationReverse
-                                                            usingBlock:^(NSObject *obj,
-                                                                         NSUInteger idx,
-                                                                         BOOL *_Nonnull stop) {
+                                                         usingBlock:^(NSObject *obj,
+                                                                      NSUInteger idx,
+                                                                      BOOL *_Nonnull stop) {
         if (delegate == obj) {
             [self.lifecycleDelegates removePointerAtIndex:idx];
             *stop = YES;
         }
     }];
+        
     [self.delegateLock unlock];
 }
 
