@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'GrowingUtils'
-  s.version          = '0.0.4'
+  s.version          = '0.0.5'
   s.summary          = 'iOS SDK of GrowingIO.'
   s.description      = <<-DESC
 GrowingAnalytics具备自动采集基本的用户行为事件，比如访问和行为数据等。目前支持代码埋点、无埋点、可视化圈选、热图等功能。
@@ -10,6 +10,7 @@ GrowingAnalytics具备自动采集基本的用户行为事件，比如访问和�
   s.author           = { 'GrowingIO' => 'support@growingio.com' }
   s.source           = { :git => 'https://github.com/growingio/growingio-sdk-ios-utilities.git', :tag => s.version.to_s }
   s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.13'
   s.requires_arc = true
   s.default_subspec = "TrackerCore"
 

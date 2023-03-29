@@ -59,8 +59,10 @@
 - (void)setupAppStateNotification {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
-    // UIApplication: Process Lifecycle
-    for (NSString *name in @[UIApplicationDidFinishLaunchingNotification, UIApplicationWillTerminateNotification]) {
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+    for (NSString *name in @[
+        UIApplicationDidFinishLaunchingNotification,
+        UIApplicationWillTerminateNotification]) {
         [nc addObserver:self
                selector:@selector(handleProcessLifecycleNotification:)
                    name:name
@@ -68,24 +70,42 @@
     }
 
     NSDictionary *sceneManifestDict = [[NSBundle mainBundle] infoDictionary][@"UIApplicationSceneManifest"];
-
     if (sceneManifestDict && UIDevice.currentDevice.systemVersion.doubleValue >= 13.0) {
         [self addSceneNotification];
     } else {
         for (NSString *name in @[
-                 UIApplicationDidBecomeActiveNotification,
-                 UIApplicationWillEnterForegroundNotification,
-                 UIApplicationWillResignActiveNotification,
-                 UIApplicationDidEnterBackgroundNotification
-             ]) {
+            UIApplicationDidBecomeActiveNotification,
+            UIApplicationWillEnterForegroundNotification,
+            UIApplicationWillResignActiveNotification,
+            UIApplicationDidEnterBackgroundNotification]) {
             [nc addObserver:self
                    selector:@selector(handleUILifecycleNotification:)
                        name:name
                      object:[UIApplication sharedApplication]];
         }
     }
+#elif TARGET_OS_OSX
+    for (NSString *name in @[
+        NSApplicationDidFinishLaunchingNotification,
+        NSApplicationWillTerminateNotification]) {
+        [nc addObserver:self
+               selector:@selector(handleProcessLifecycleNotification:)
+                   name:name
+                 object:[NSApplication sharedApplication]];
+    }
+    
+    for (NSString *name in @[
+        NSApplicationDidBecomeActiveNotification,
+        NSApplicationWillResignActiveNotification]) {
+        [nc addObserver:self
+               selector:@selector(handleUILifecycleNotification:)
+                   name:name
+                 object:[NSApplication sharedApplication]];
+    }
+#endif
 }
 
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
 - (void)addSceneNotification {
     if (@available(iOS 13, *)) {
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -113,6 +133,7 @@
                  object:nil];
     }
 }
+#endif
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -121,16 +142,25 @@
 - (void)handleProcessLifecycleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
 
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]) {
         [self dispatchApplicationDidFinishLaunching:notification.userInfo];
     } else if ([name isEqualToString:UIApplicationWillTerminateNotification]) {
         [self dispatchApplicationWillTerminate];
     }
+#elif TARGET_OS_OSX
+    if ([name isEqualToString:NSApplicationDidFinishLaunchingNotification]) {
+        [self dispatchApplicationDidFinishLaunching:notification.userInfo];
+    } else if ([name isEqualToString:NSApplicationWillTerminateNotification]) {
+        [self dispatchApplicationWillTerminate];
+    }
+#endif
 }
 
 - (void)handleUILifecycleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
 
+#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
     if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]) {
         [self dispatchApplicationDidBecomeActive];
     } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
@@ -140,6 +170,13 @@
     } else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
         [self dispatchApplicationDidEnterBackground];
     }
+#elif TARGET_OS_OSX
+    if ([name isEqualToString:NSApplicationDidBecomeActiveNotification]) {
+        [self dispatchApplicationDidBecomeActive];
+    } else if ([name isEqualToString:NSApplicationWillResignActiveNotification]) {
+        [self dispatchApplicationWillResignActive];
+    }
+#endif
 }
 
 - (void)addAppLifecycleDelegate:(id)delegate {
