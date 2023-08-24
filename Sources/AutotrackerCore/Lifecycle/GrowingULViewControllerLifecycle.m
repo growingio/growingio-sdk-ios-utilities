@@ -30,6 +30,7 @@
 - (void)dispatchViewControllerLoadView:(UIViewController *)controller;
 - (void)dispatchViewControllerDidLoad:(UIViewController *)controller;
 - (void)dispatchViewControllerWillAppear:(UIViewController *)controller;
+- (void)dispatchViewControllerIsAppearing:(UIViewController *)controller;
 - (void)dispatchViewControllerDidAppear:(UIViewController *)controller;
 - (void)dispatchViewControllerWillDisappear:(UIViewController *)controller;
 - (void)dispatchViewControllerDidDisappear:(UIViewController *)controller;
@@ -51,6 +52,11 @@
 - (void)growingul_viewWillAppear:(BOOL)animated {
     [self growingul_viewWillAppear:animated];
     [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerWillAppear:self];
+}
+
+- (void)growingul_viewIsAppearing:(BOOL)animated {
+    [self growingul_viewIsAppearing:animated];
+    [[GrowingULViewControllerLifecycle sharedInstance] dispatchViewControllerIsAppearing:self];
 }
 
 - (void)growingul_viewDidAppear:(BOOL)animated {
@@ -132,6 +138,15 @@
     [UIViewController growingul_swizzleMethod:@selector(viewDidDisappear:)
                                    withMethod:@selector(growingul_viewDidDisappear:)
                                         error:nil];
+    
+    if (@available(iOS 13.0, *)) {
+        SEL selector = NSSelectorFromString(@"viewIsAppearing:");
+        if ([UIViewController instancesRespondToSelector:selector]) {
+            [UIViewController growingul_swizzleMethod:selector
+                                           withMethod:@selector(growingul_viewIsAppearing:)
+                                                error:nil];
+        }
+    }
 }
 
 - (void)addViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate {
@@ -191,6 +206,19 @@
     for (id delegate in self.lifecycleDelegates) {
         if ([delegate respondsToSelector:@selector(viewControllerWillAppear:)]) {
             [delegate viewControllerWillAppear:controller];
+        }
+    }
+    [self.delegateLock unlock];
+}
+
+- (void)dispatchViewControllerIsAppearing:(UIViewController *)controller {
+    if (controller == nil) {
+        return;
+    }
+    [self.delegateLock lock];
+    for (id delegate in self.lifecycleDelegates) {
+        if ([delegate respondsToSelector:@selector(viewControllerIsAppearing:)]) {
+            [delegate viewControllerIsAppearing:controller];
         }
     }
     [self.delegateLock unlock];

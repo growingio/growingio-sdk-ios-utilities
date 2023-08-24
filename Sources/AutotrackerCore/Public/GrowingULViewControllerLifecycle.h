@@ -29,6 +29,8 @@
 
 - (void)viewControllerWillAppear:(UIViewController *)controller;
 
+- (void)viewControllerIsAppearing:(UIViewController *)controller;
+
 - (void)viewControllerDidAppear:(UIViewController *)controller;
 
 - (void)viewControllerWillDisappear:(UIViewController *)controller;
