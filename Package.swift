@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 //
@@ -24,19 +24,31 @@ import PackageDescription
 
 let package = Package(
     name: "GrowingUtils",
-    platforms: [.iOS(.v9)],
+    platforms: [.iOS(.v10), .macCatalyst(.v13), .macOS(.v10_12)],
     products: [
         .library(
             name: "GrowingUtilsTrackerCore",
-            targets: ["GrowingUtilsTrackerCore"]
+            targets: ["GrowingUtilsTrackerCore_Wrapper"]
         ),
         .library(
             name: "GrowingUtilsAutotrackerCore",
-            targets: ["GrowingUtilsAutotrackerCore"]
+            targets: ["GrowingUtilsAutotrackerCore_Wrapper"]
         ),
     ],
     dependencies: [],
     targets: [
+        .target(
+            name: "GrowingUtilsTrackerCore_Wrapper",
+            dependencies: [.target(name: "GrowingUtilsTrackerCore",
+                                   condition: .when(platforms: [.iOS, .macCatalyst, .macOS]))],
+            path: "SwiftPM-Wrap/TrackerCore-Wrapper"
+        ),
+        .target(
+            name: "GrowingUtilsAutotrackerCore_Wrapper",
+            dependencies: [.target(name: "GrowingUtilsAutotrackerCore",
+                                   condition: .when(platforms: [.iOS, .macCatalyst]))],
+            path: "SwiftPM-Wrap/AutotrackerCore-Wrapper"
+        ),
         .target(
             name: "GrowingUtilsTrackerCore",
             dependencies: [],
