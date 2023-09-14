@@ -53,18 +53,17 @@ let package = Package(
             name: "GrowingUtilsTrackerCore",
             dependencies: [],
             path: "Sources/TrackerCore",
-            publicHeadersPath: "Public",
+            resources: [.copy("Resources/PrivacyInfo.xcprivacy")],
             cSettings: [
-                .headerSearchPath("Public"),
+                .headerSearchPath("include"),
             ]
         ),
         .target(
             name: "GrowingUtilsAutotrackerCore",
             dependencies: ["GrowingUtilsTrackerCore"],
             path: "Sources/AutotrackerCore",
-            publicHeadersPath: "Public",
             cSettings: [
-                .headerSearchPath("Public"),
+                .headerSearchPath("include"),
             ]
         ),
     ]
