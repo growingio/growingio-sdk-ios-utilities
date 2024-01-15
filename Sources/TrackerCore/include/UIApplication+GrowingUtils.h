@@ -1,5 +1,5 @@
 //
-//  GrowingULApplication.h
+//  UIApplication+GrowingUtils.h
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/1/15.
@@ -17,21 +17,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-
 #if __has_include(<UIKit/UIKit.h>)
-#import "UIApplication+GrowingUtils.h"
-#import "UIViewController+GrowingUtils.h"
-#endif
+#import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
+@interface UIApplication (GrowingUtils)
 
-@interface GrowingULApplication : NSObject
-
-+ (nullable id)sharedApplication;
-
-+ (BOOL)isAppExtension;
+- (nullable UIWindow *)growingul_keyWindow;
+- (nullable UIViewController *)growingul_topViewController;
+- (CGFloat)growingul_statusBarHeight;
 
 @end
-
-NS_ASSUME_NONNULL_END
+#endif

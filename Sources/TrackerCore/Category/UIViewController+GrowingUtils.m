@@ -1,5 +1,5 @@
 //
-//  GrowingULApplication.h
+//  UIViewController+GrowingUtils.m
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/1/15.
@@ -17,21 +17,29 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-
 #if __has_include(<UIKit/UIKit.h>)
-#import "UIApplication+GrowingUtils.h"
 #import "UIViewController+GrowingUtils.h"
-#endif
 
-NS_ASSUME_NONNULL_BEGIN
+@implementation UIViewController (GrowingUtils)
 
-@interface GrowingULApplication : NSObject
-
-+ (nullable id)sharedApplication;
-
-+ (BOOL)isAppExtension;
+- (nullable UIViewController *)growingul_topViewController {
+    UIViewController *presented = self.presentedViewController;
+    if (presented) {
+        return [presented growingul_topViewController];
+    }
+    
+    if ([self isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav = (UINavigationController *)self;
+        return [nav.visibleViewController growingul_topViewController];
+    }
+    
+    if ([self isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tab = (UITabBarController *)self;
+        return [tab.selectedViewController growingul_topViewController];
+    }
+    
+    return self;
+}
 
 @end
-
-NS_ASSUME_NONNULL_END
+#endif
