@@ -5,7 +5,7 @@ GrowingIO Utils
 ## License
 
 ```
-Copyright (C) 2022 Beijing Yishu Technology Co., Ltd.
+Copyright (C) 2024 Beijing Yishu Technology Co., Ltd.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
