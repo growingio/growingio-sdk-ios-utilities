@@ -17,6 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+#import "GrowingULApplication.h"
 #import "GrowingULAppLifecycle.h"
 #import "GrowingULTimeUtil.h"
 
@@ -66,7 +67,7 @@
         [nc addObserver:self
                selector:@selector(handleProcessLifecycleNotification:)
                    name:name
-                 object:[UIApplication sharedApplication]];
+                 object:[GrowingULApplication sharedApplication]];
     }
 
     NSDictionary *sceneManifestDict = [[NSBundle mainBundle] infoDictionary][@"UIApplicationSceneManifest"];
@@ -81,7 +82,7 @@
             [nc addObserver:self
                    selector:@selector(handleUILifecycleNotification:)
                        name:name
-                     object:[UIApplication sharedApplication]];
+                     object:[GrowingULApplication sharedApplication]];
         }
     }
 #elif TARGET_OS_OSX
