@@ -1,5 +1,5 @@
 //
-//  UIApplication+GrowingUtils.m
+//  UIApplication+GrowingUtilsTrackerCore.m
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/1/15.
@@ -18,11 +18,11 @@
 //  limitations under the License.
 
 #if __has_include(<UIKit/UIKit.h>)
-#import "UIApplication+GrowingUtils.h"
-#import "UIViewController+GrowingUtils.h"
+#import "UIApplication+GrowingUtilsTrackerCore.h"
+#import "UIViewController+GrowingUtilsTrackerCore.h"
 #import "GrowingULApplication.h"
 
-@implementation UIApplication (GrowingUtils)
+@implementation UIApplication (GrowingUtilsTrackerCore)
 
 - (nullable UIWindow *)growingul_keyWindow {
     if ([GrowingULApplication isAppExtension]) {

@@ -39,7 +39,7 @@
 
 @end
 
-@interface UIViewController (GrowingUtils)
+@interface UIViewController (GrowingUtilsAutotrackerCore)
 
 @property (nonatomic, assign) BOOL growingul_didAppear;
 

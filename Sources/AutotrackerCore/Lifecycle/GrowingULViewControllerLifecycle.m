@@ -37,7 +37,7 @@
 
 @end
 
-@implementation UIViewController (GrowingUtils)
+@implementation UIViewController (GrowingUtilsAutotrackerCore)
 
 - (void)growingul_loadView {
     [self growingul_loadView];

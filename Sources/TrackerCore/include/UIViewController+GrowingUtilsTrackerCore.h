@@ -1,5 +1,5 @@
 //
-//  UIViewController+GrowingUtils.h
+//  UIViewController+GrowingUtilsTrackerCore.h
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/1/15.
@@ -20,7 +20,7 @@
 #if __has_include(<UIKit/UIKit.h>)
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (GrowingUtils)
+@interface UIViewController (GrowingUtilsTrackerCore)
 
 - (nullable UIViewController *)growingul_topViewController;
 

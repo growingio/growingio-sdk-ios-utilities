@@ -20,8 +20,8 @@
 #import <Foundation/Foundation.h>
 
 #if __has_include(<UIKit/UIKit.h>)
-#import "UIApplication+GrowingUtils.h"
-#import "UIViewController+GrowingUtils.h"
+#import "UIApplication+GrowingUtilsTrackerCore.h"
+#import "UIViewController+GrowingUtilsTrackerCore.h"
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
