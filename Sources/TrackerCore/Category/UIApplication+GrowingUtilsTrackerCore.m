@@ -17,7 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#if __has_include(<UIKit/UIKit.h>)
+#import "GrowingTargetConditionals.h"
+
+#if Growing_USE_UIKIT
 #import "UIApplication+GrowingUtilsTrackerCore.h"
 #import "UIViewController+GrowingUtilsTrackerCore.h"
 #import "GrowingULApplication.h"
@@ -29,7 +31,11 @@
         return nil;
     }
     
-    if (@available(iOS 13.0, *)) {
+#if Growing_OS_VISION
+    if (1) { // if (@available(visionOS 1.0, *)) {
+#else
+    if (@available(iOS 13.0, macCatalyst 13.1, tvOS 13.0, *)) {
+#endif
         for (UIScene *scene in self.connectedScenes) {
             if (scene.activationState != UISceneActivationStateForegroundActive) {
                 continue;
@@ -71,11 +77,15 @@
 }
 
 - (CGFloat)growingul_statusBarHeight {
-    if (@available(iOS 13.0, *)) {
-        return self.growingul_keyWindow.windowScene.statusBarManager.statusBarFrame.size.height;
+    CGFloat statusBarHeight = 0.0f;
+#if Growing_OS_IOS || Growing_OS_MACCATALYST
+    if (@available(iOS 13.0, macCatalyst 13.1, *)) {
+        statusBarHeight = self.growingul_keyWindow.windowScene.statusBarManager.statusBarFrame.size.height;
+    } else {
+        statusBarHeight = self.statusBarFrame.size.height;
     }
-    
-    return self.statusBarFrame.size.height;
+#endif
+    return statusBarHeight;
 }
 
 @end

@@ -1,0 +1,25 @@
+name: Pod Lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-13
+
+    steps:
+      - name: Force Xcode 15
+        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
+        
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Pod Lint
+        run: pod lib lint GrowingUtils.podspec --allow-warnings --verbose

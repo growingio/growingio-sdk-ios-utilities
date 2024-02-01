@@ -1,4 +1,4 @@
-name: Cocoapods
+name: Cocoapods Trunk Push
 on:
   release:
     types: [published]

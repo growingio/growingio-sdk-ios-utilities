@@ -17,15 +17,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-
-#if __has_include(<UIKit/UIKit.h>)
-#import <UIKit/UIKit.h>
-#endif
-
-#if __has_include(<AppKit/AppKit.h>)
-#import <AppKit/AppKit.h>
-#endif
+#import "GrowingTargetConditionals.h"
 
 @protocol GrowingULAppLifecycleDelegate <NSObject>
 

@@ -60,7 +60,7 @@
 - (void)setupAppStateNotification {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if Growing_USE_UIKIT
     for (NSString *name in @[
         UIApplicationDidFinishLaunchingNotification,
         UIApplicationWillTerminateNotification]) {
@@ -85,14 +85,14 @@
                      object:[GrowingULApplication sharedApplication]];
         }
     }
-#elif TARGET_OS_OSX
+#elif Growing_USE_APPKIT
     for (NSString *name in @[
         NSApplicationDidFinishLaunchingNotification,
         NSApplicationWillTerminateNotification]) {
         [nc addObserver:self
                selector:@selector(handleProcessLifecycleNotification:)
                    name:name
-                 object:[NSApplication sharedApplication]];
+                 object:[GrowingULApplication sharedApplication]];
     }
     
     for (NSString *name in @[
@@ -101,12 +101,33 @@
         [nc addObserver:self
                selector:@selector(handleUILifecycleNotification:)
                    name:name
-                 object:[NSApplication sharedApplication]];
+                 object:[GrowingULApplication sharedApplication]];
+    }
+#elif Growing_USE_WATCHKIT
+    if (@available (watchOS 7.0, *)) {
+        for (NSString *name in @[
+            WKApplicationDidFinishLaunchingNotification]) {
+            [nc addObserver:self
+                   selector:@selector(handleProcessLifecycleNotification:)
+                       name:name
+                     object:[GrowingULApplication sharedApplication]];
+        }
+        
+        for (NSString *name in @[
+            WKApplicationDidBecomeActiveNotification,
+            WKApplicationWillEnterForegroundNotification,
+            WKApplicationWillResignActiveNotification,
+            WKApplicationDidEnterBackgroundNotification]) {
+            [nc addObserver:self
+                   selector:@selector(handleUILifecycleNotification:)
+                       name:name
+                     object:[GrowingULApplication sharedApplication]];
+        }
     }
 #endif
 }
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if Growing_USE_UIKIT
 - (void)addSceneNotification {
     if (@available(iOS 13, *)) {
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -143,17 +164,23 @@
 - (void)handleProcessLifecycleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if Growing_USE_UIKIT
     if ([name isEqualToString:UIApplicationDidFinishLaunchingNotification]) {
         [self dispatchApplicationDidFinishLaunching:notification.userInfo];
     } else if ([name isEqualToString:UIApplicationWillTerminateNotification]) {
         [self dispatchApplicationWillTerminate];
     }
-#elif TARGET_OS_OSX
+#elif Growing_USE_APPKIT
     if ([name isEqualToString:NSApplicationDidFinishLaunchingNotification]) {
         [self dispatchApplicationDidFinishLaunching:notification.userInfo];
     } else if ([name isEqualToString:NSApplicationWillTerminateNotification]) {
         [self dispatchApplicationWillTerminate];
+    }
+#elif Growing_USE_WATCHKIT
+    if (@available (watchOS 7.0, *)) {
+        if ([name isEqualToString:WKApplicationDidFinishLaunchingNotification]) {
+            [self dispatchApplicationDidFinishLaunching:notification.userInfo];
+        }
     }
 #endif
 }
@@ -161,7 +188,7 @@
 - (void)handleUILifecycleNotification:(NSNotification *)notification {
     NSString *name = notification.name;
 
-#if TARGET_OS_IOS || TARGET_OS_MACCATALYST
+#if Growing_USE_UIKIT
     if ([name isEqualToString:UIApplicationDidBecomeActiveNotification]) {
         [self dispatchApplicationDidBecomeActive];
     } else if ([name isEqualToString:UIApplicationWillEnterForegroundNotification]) {
@@ -171,11 +198,23 @@
     } else if ([name isEqualToString:UIApplicationDidEnterBackgroundNotification]) {
         [self dispatchApplicationDidEnterBackground];
     }
-#elif TARGET_OS_OSX
+#elif Growing_USE_APPKIT
     if ([name isEqualToString:NSApplicationDidBecomeActiveNotification]) {
         [self dispatchApplicationDidBecomeActive];
     } else if ([name isEqualToString:NSApplicationWillResignActiveNotification]) {
         [self dispatchApplicationWillResignActive];
+    }
+#elif Growing_USE_WATCHKIT
+    if (@available (watchOS 7.0, *)) {
+        if ([name isEqualToString:WKApplicationDidBecomeActiveNotification]) {
+            [self dispatchApplicationDidBecomeActive];
+        } else if ([name isEqualToString:WKApplicationWillEnterForegroundNotification]) {
+            [self dispatchApplicationWillEnterForeground];
+        } else if ([name isEqualToString:WKApplicationWillResignActiveNotification]) {
+            [self dispatchApplicationWillResignActive];
+        } else if ([name isEqualToString:WKApplicationDidEnterBackgroundNotification]) {
+            [self dispatchApplicationDidEnterBackground];
+        }
     }
 #endif
 }
