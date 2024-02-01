@@ -17,9 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "GrowingTargetConditionals.h"
 
+#if Growing_USE_UIKIT
 @protocol GrowingULViewControllerLifecycleDelegate <NSObject>
 
 @optional
@@ -56,3 +56,4 @@
 - (void)removeViewControllerLifecycleDelegate:(id<GrowingULViewControllerLifecycleDelegate>)delegate;
 
 @end
+#endif

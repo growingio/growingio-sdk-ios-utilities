@@ -11,6 +11,8 @@ GrowingAnalytics具备自动采集基本的用户行为事件，比如访问和�
   s.source           = { :git => 'https://github.com/growingio/growingio-sdk-ios-utilities.git', :tag => s.version.to_s }
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.12'
+  s.tvos.deployment_target = '10.0'
+  s.watchos.deployment_target = '7.0'
   s.requires_arc = true
   s.default_subspec = "TrackerCore"
 

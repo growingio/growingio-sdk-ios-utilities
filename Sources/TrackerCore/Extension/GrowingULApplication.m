@@ -24,13 +24,15 @@
 + (nullable id)sharedApplication {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-#if TARGET_OS_OSX
-    Class class = NSClassFromString(@"NSApplication");
-#elif TARGET_OS_IOS || TARGET_OS_MACCATALYST || TARGET_OS_TV
-    Class class = NSClassFromString(@"UIApplication");
-#elif TARGET_OS_WATCH
-    Class class = NSClassFromString(@"WKApplication");
+    Class class;
+#if Growing_USE_APPKIT
+    class = NSClassFromString(@"NSApplication");
+#elif Growing_USE_UIKIT
+    class = NSClassFromString(@"UIApplication");
+#elif Growing_USE_WATCHKIT
+    class = NSClassFromString(@"WKApplication");
 #endif
+    
     SEL selector = NSSelectorFromString(@"sharedApplication");
     if(!class || ![class respondsToSelector:selector]) {
         return nil;
@@ -40,10 +42,10 @@
 }
 
 + (BOOL)isAppExtension {
-#if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_WATCH
-  return [[[NSBundle mainBundle] bundlePath] hasSuffix:@".appex"];
-#elif TARGET_OS_OSX
-  return NO;
+#if Growing_OS_IOS || Growing_OS_TV || Growing_OS_WATCH
+    return [[[NSBundle mainBundle] bundlePath] hasSuffix:@".appex"];
+#else
+    return NO;
 #endif
 }
 
