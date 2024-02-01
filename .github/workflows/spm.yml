@@ -56,7 +56,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=macOS' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=macOS,name=Any Mac' \
           | xcbeautify --renderer github-actions
 
   build-watchOS:
@@ -72,7 +72,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=watchOS' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=watchOS,name=Any watchOS Device' \
           | xcbeautify --renderer github-actions
 
   build-tvOS:
@@ -88,7 +88,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=tvOS' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=tvOS,name=Any tvOS Device' \
           | xcbeautify --renderer github-actions
 
   build-visionOS:
@@ -104,5 +104,5 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=visionOS' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=visionOS,name=Any visionOS Device' \
           | xcbeautify --renderer github-actions
