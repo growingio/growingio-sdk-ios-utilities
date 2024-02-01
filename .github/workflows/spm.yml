@@ -56,7 +56,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=macOS,name=Any Mac' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=macOS' \
           | xcbeautify --renderer github-actions
 
   build-watchOS:
@@ -72,7 +72,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=watchOS,name=Any watchOS Device' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=watchOS Simulator,name=Apple Watch Ultra 2 (49mm)' \
           | xcbeautify --renderer github-actions
 
   build-tvOS:
@@ -88,7 +88,7 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=tvOS,name=Any tvOS Device' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=tvOS Simulator,name=Apple TV' \
           | xcbeautify --renderer github-actions
 
   build-visionOS:
@@ -104,5 +104,5 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=visionOS,name=Any visionOS Device' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=visionOS Simulator,name=Apple Vision Pro' \
           | xcbeautify --renderer github-actions
