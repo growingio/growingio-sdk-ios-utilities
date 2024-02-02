@@ -45,14 +45,13 @@ let package = Package(
     targets: [
         .target(
             name: "GrowingUtilsTrackerCore_Wrapper",
-            dependencies: [.target(name: "GrowingUtilsTrackerCore",
-                                   condition: .when(platforms: [.iOS, .macCatalyst, .macOS]))],
+            dependencies: [.target(name: "GrowingUtilsTrackerCore")],
             path: "SwiftPM-Wrap/TrackerCore-Wrapper"
         ),
         .target(
             name: "GrowingUtilsAutotrackerCore_Wrapper",
             dependencies: [.target(name: "GrowingUtilsAutotrackerCore",
-                                   condition: .when(platforms: [.iOS, .macCatalyst]))],
+                                   condition: .when(platforms: [.iOS, .macCatalyst, .tvOS]))],
             path: "SwiftPM-Wrap/AutotrackerCore-Wrapper"
         ),
         .target(
