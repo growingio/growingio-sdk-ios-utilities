@@ -110,7 +110,7 @@
             [nc addObserver:self
                    selector:@selector(handleProcessLifecycleNotification:)
                        name:name
-                     object:[GrowingULApplication sharedApplication]];
+                     object:nil];
         }
         
         for (NSString *name in @[
@@ -121,7 +121,7 @@
             [nc addObserver:self
                    selector:@selector(handleUILifecycleNotification:)
                        name:name
-                     object:[GrowingULApplication sharedApplication]];
+                     object:nil];
         }
     }
 #endif
