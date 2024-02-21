@@ -5,13 +5,14 @@ on:
 
 jobs:
   publish:
-    runs-on: macos-14
+    runs-on: macos-13
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Force Xcode 15
         run: sudo xcode-select -switch /Applications/Xcode_15.2.app
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
         
       - name: Deploy to Cocoapods
         run: |
