@@ -1,5 +1,5 @@
 //
-//  GrowingKeyChainWrapper.m
+//  GrowingULKeyChainWrapper.m
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/7/11.
@@ -17,9 +17,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingKeyChainWrapper.h"
+#import "GrowingULKeyChainWrapper.h"
 
-@implementation GrowingKeyChainWrapper
+@implementation GrowingULKeyChainWrapper
 
 + (void)setKeychainObject:(id)value forKey:(NSString *)key {
     // Get search dictionary

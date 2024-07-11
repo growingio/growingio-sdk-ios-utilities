@@ -1,5 +1,5 @@
 //
-//  GrowingAESEncrypt.m
+//  GrowingULAESEncrypt.m
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/7/11.
@@ -17,11 +17,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingAESEncrypt.h"
-#import "GrowingEncryptor.h"
+#import "GrowingULAESEncrypt.h"
+#import "GrowingULEncryptor.h"
 #import <CommonCrypto/CommonCrypto.h>
 
-@implementation GrowingAESEncrypt
+@implementation GrowingULAESEncrypt
 
 + (nullable NSData *)aesEncrypt:(NSData *)data key:(NSData *)key {
     return [self aesCrypt:data operation:kCCEncrypt key:key];
@@ -35,7 +35,7 @@
     NSData *iv = nil;
     size_t ivLength = kCCBlockSizeAES128;
     if (operation == kCCEncrypt) {
-        iv = [GrowingEncryptor randomGenerateBytes:ivLength];
+        iv = [GrowingULEncryptor randomGenerateBytes:ivLength];
     } else if (operation == kCCDecrypt) {
         if (data.length <= ivLength) {
             return nil;

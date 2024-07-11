@@ -1,5 +1,5 @@
 //
-//  GrowingEncryptor.h
+//  GrowingULEncryptor.h
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/7/11.
@@ -21,7 +21,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GrowingEncryptor : NSObject
+@interface GrowingULEncryptor : NSObject
 
 + (instancetype)encryptor;
 

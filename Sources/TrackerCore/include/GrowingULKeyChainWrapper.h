@@ -1,5 +1,5 @@
 //
-//  GrowingAESEncrypt.h
+//  GrowingULKeyChainWrapper.h
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/7/11.
@@ -21,13 +21,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GrowingAESEncrypt : NSObject
+@interface GrowingULKeyChainWrapper : NSObject
 
-+ (nullable NSData *)aesEncrypt:(NSData *)data key:(NSData *)key;
++ (void)setKeychainObject:(id)value forKey:(NSString *)key;
 
-+ (nullable NSData *)aesDecrypt:(NSData *)data key:(NSData *)key;
++ (id)keyChainObjectForKey:(NSString *)key;
+
++ (void)removeKeyChainObjectForKey:(NSString *)key;
 
 @end
 
 NS_ASSUME_NONNULL_END
-

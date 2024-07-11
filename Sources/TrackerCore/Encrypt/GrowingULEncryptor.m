@@ -1,5 +1,5 @@
 //
-//  GrowingEncryptor.m
+//  GrowingULEncryptor.m
 //  GrowingAnalytics
 //
 //  Created by YoloMao on 2024/7/11.
@@ -17,20 +17,20 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#import "GrowingEncryptor.h"
-#import "GrowingAESEncrypt.h"
-#import "GrowingKeyChainWrapper.h"
+#import "GrowingULEncryptor.h"
+#import "GrowingULAESEncrypt.h"
+#import "GrowingULKeyChainWrapper.h"
 #import <CommonCrypto/CommonCrypto.h>
 
 static NSString *const kGrowingKeychainAESEncryptKey = @"GrowingKeychainAESEncryptKey";
 
-@interface GrowingEncryptor ()
+@interface GrowingULEncryptor ()
 
 @property (nonatomic, copy) NSData *key;
 
 @end
 
-@implementation GrowingEncryptor
+@implementation GrowingULEncryptor
 
 + (instancetype)encryptor {
     static id _sharedInstance = nil;
@@ -43,11 +43,11 @@ static NSString *const kGrowingKeychainAESEncryptKey = @"GrowingKeychainAESEncry
 }
 
 - (nullable NSData *)aesEncrypt:(NSData *)data {
-    return [GrowingAESEncrypt aesEncrypt:data key:self.key];
+    return [GrowingULAESEncrypt aesEncrypt:data key:self.key];
 }
 
 - (nullable NSData *)aesDecrypt:(NSData *)data {
-    return [GrowingAESEncrypt aesDecrypt:data key:self.key];
+    return [GrowingULAESEncrypt aesDecrypt:data key:self.key];
 }
 
 + (nullable NSData *)randomGenerateBytes:(size_t)count {
@@ -61,11 +61,11 @@ static NSString *const kGrowingKeychainAESEncryptKey = @"GrowingKeychainAESEncry
 
 - (NSData *)key {
     if (!_key || _key.length != kCCBlockSizeAES128) {
-        NSData *generateKey = [GrowingKeyChainWrapper keyChainObjectForKey:kGrowingKeychainAESEncryptKey];
+        NSData *generateKey = [GrowingULKeyChainWrapper keyChainObjectForKey:kGrowingKeychainAESEncryptKey];
         if (!generateKey || generateKey.length != kCCBlockSizeAES128) {
             // randomGenerateBytes may return nil
-            generateKey = [GrowingEncryptor randomGenerateBytes:kCCBlockSizeAES128];
-            [GrowingKeyChainWrapper setKeychainObject:[generateKey copy] forKey:kGrowingKeychainAESEncryptKey];
+            generateKey = [GrowingULEncryptor randomGenerateBytes:kCCBlockSizeAES128];
+            [GrowingULKeyChainWrapper setKeychainObject:[generateKey copy] forKey:kGrowingKeychainAESEncryptKey];
         }
         _key = generateKey;
     }
