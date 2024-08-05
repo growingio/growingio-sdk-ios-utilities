@@ -354,27 +354,8 @@ static NSMutableSet *swizzledClassesForKey(const void *key){
 }
 
 + (id)realDelegate:(id)proxy toSelector:(SEL)selector {
-    if (!proxy) {
-        return nil;
-    }
-
-    id realDelegate = proxy;
-    id obj = nil;
-    do {
-        //避免proxy本身实现了该方法或通过resolveInstanceMethod添加了方法实现
-        if (class_getInstanceMethod(object_getClass(realDelegate), selector)) {
-            break;
-        }
-
-        //如果使用了NSProxy或者快速转发,判断forwardingTargetForSelector是否实现
-        //默认forwardingTargetForSelector都有实现，只是返回为nil
-        obj = ((id(*)(id, SEL, SEL))objc_msgSend)(realDelegate, @selector(forwardingTargetForSelector:), selector);
-        if (!obj)
-            break;
-        realDelegate = obj;
-    } while (obj);
-
-    return realDelegate;
+    // 不再兼容forwardingTargetForSelector场景，仅通过下方的class_respondsToSelector判断当前类是否有对应实现
+    return proxy;
 }
 
 + (BOOL)realDelegateClass:(Class)cls respondsToSelector:(SEL)sel {
