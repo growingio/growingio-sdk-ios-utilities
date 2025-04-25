@@ -12,28 +12,22 @@ concurrency:
 
 jobs:
   build-iOS:
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Build
         run: |
           set -euo pipefail
-          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=iOS Simulator,name=iPhone 15 Pro Max' \
+          xcodebuild build -scheme GrowingUtils-Package -destination 'platform=iOS Simulator,name=iPhone 16 Pro Max' \
           | xcbeautify --renderer github-actions
 
   build-catalyst:
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
@@ -44,12 +38,9 @@ jobs:
           | xcbeautify --renderer github-actions
 
   build-macOS:
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
@@ -60,12 +51,9 @@ jobs:
           | xcbeautify --renderer github-actions
 
   build-watchOS:
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
@@ -76,12 +64,9 @@ jobs:
           | xcbeautify --renderer github-actions
 
   build-tvOS:
-    runs-on: macos-13
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
@@ -92,12 +77,9 @@ jobs:
           | xcbeautify --renderer github-actions
 
   build-visionOS:
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
-      - name: Force Xcode 15
-        run: sudo xcode-select -switch /Applications/Xcode_15.2.app
-
       - name: Checkout Repo
         uses: actions/checkout@v4
 
